@@ -22,3 +22,5 @@ CREATE TABLE `movie` (
 
 ALTER TABLE `movie`
   ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `movie` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
