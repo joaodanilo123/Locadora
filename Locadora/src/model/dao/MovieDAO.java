@@ -2,7 +2,10 @@ package model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -32,5 +35,39 @@ public class MovieDAO {
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
+	}
+	
+	public List<Movie> read(){
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		List<Movie> movies = new ArrayList<>();
+		
+		try {
+			stmt = con.prepareStatement("SELECT * FROM movie");
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Movie m = new Movie();
+				m.setId(rs.getInt("id"));
+				m.setTitle(rs.getString("title"));
+				m.setLenght(rs.getInt("length"));
+				m.setDubbed(rs.getBoolean("dubbed"));
+				m.setCategory(rs.getString("category"));
+				m.setImage3d(rs.getBoolean("image3d"));
+				m.setSynopsis(rs.getString("synopsis"));
+				
+				movies.add(m);
+				
+			}
+			
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao buscar as informações: " + e.getMessage());
+		} finally {
+			ConnectionFactory.closeConnection(con, stmt);
+		}
+		
+		return movies;
+	
 	}
 }
