@@ -68,5 +68,63 @@ public class CustomerDAO {
 	
 	}
 	
+	public Customer read(int custumerId) {
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Customer m = new Customer();
+		
+		try {
+			stmt = con.prepareStatement("SELECT * FROM customer WHERE id=?");
+			stmt.setInt(1 , custumerId);
+
+			rs = stmt.executeQuery();
+			
+			if(rs != null && rs.next()){
+			
+				m.setId(rs.getInt("id"));
+				m.setName(rs.getString("name"));
+				m.setPhone(rs.getString("phone"));
+				m.setEmail(rs.getString("email"));
+				m.setCpf(rs.getString("cpf"));
+			}
+			
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao buscar as informações: " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.closeConnection(con, stmt, rs);
+		}
+		
+		return m;
+		
+		
+	}
+	
+	public void update(Customer c) {
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement("UPDATE customer SET name=?, phone=?, email=?, cpf=? WHERE id=?");
+			
+			stmt.setString(1, c.getName());
+			stmt.setString(2,  c.getPhone());
+			stmt.setString(3,  c.getEmail());
+			stmt.setString(4,  c.getCpf());
+			stmt.setInt(5, c.getId());
+			
+			stmt.executeUpdate();
+			
+			JOptionPane.showMessageDialog(null, "Mudanças salvas com sucesso");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao atualizar:" + e);
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.closeConnection(con, stmt);
+		}
+		
+	}
+	
 	
 }

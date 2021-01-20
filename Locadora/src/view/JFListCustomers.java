@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -17,11 +19,17 @@ import model.dao.CustomerDAO;
 
 
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JFListCustomers extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable JTMovies;
+	private JTable jtCustomers;
 
 	/**
 	 * Launch the application.
@@ -60,8 +68,8 @@ public class JFListCustomers extends JFrame {
 		scrollPane.setBounds(20, 45, 597, 306);
 		contentPane.add(scrollPane);
 		
-		JTMovies = new JTable();
-		JTMovies.setModel(new DefaultTableModel(
+		jtCustomers = new JTable();
+		jtCustomers.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null},
 				{null, null, null, null, null},
@@ -71,13 +79,33 @@ public class JFListCustomers extends JFrame {
 				"ID", "Nome", "Email", "Telefone", "CPF"
 			}
 		));
-		scrollPane.setViewportView(JTMovies);
+		scrollPane.setViewportView(jtCustomers);
 		
 		JButton btnCreate = new JButton("Cadastrar Cliente");
 		btnCreate.setBounds(20, 379, 134, 23);
 		contentPane.add(btnCreate);
 		
 		JButton btnChange = new JButton("Alterar Cliente");
+		btnChange.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = jtCustomers.getSelectedRow();
+				
+				if(selectedRow != -1) {
+					
+					int id = (int) jtCustomers.getValueAt(selectedRow, 0);
+					
+					JFUpdateCustomer af = new JFUpdateCustomer(id);
+					
+					af.setVisible(true);
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "Selecione um cliente");
+				}
+				
+				readJTable();	
+				
+			}
+		});
 		btnChange.setBounds(163, 379, 115, 23);
 		contentPane.add(btnChange);
 		
@@ -90,7 +118,7 @@ public class JFListCustomers extends JFrame {
 	}
 	
 	public void readJTable() {
-		DefaultTableModel model = (DefaultTableModel) JTMovies.getModel();
+		DefaultTableModel model = (DefaultTableModel) jtCustomers.getModel();
 		model.setNumRows(0);
 		CustomerDAO dao = new CustomerDAO();
 		

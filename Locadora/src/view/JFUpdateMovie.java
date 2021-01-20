@@ -25,7 +25,7 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class JFRegisterMovie extends JFrame {
+public class JFUpdateMovie extends JFrame {
 
 	/**
 	 * 
@@ -34,7 +34,10 @@ public class JFRegisterMovie extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtTitle;
 	private JTextField txtCategory;
-
+	
+	private static int id;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -42,7 +45,7 @@ public class JFRegisterMovie extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JFRegisterMovie frame = new JFRegisterMovie();
+					JFUpdateMovie frame = new JFUpdateMovie(id);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,15 +57,20 @@ public class JFRegisterMovie extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JFRegisterMovie() {
+	public JFUpdateMovie(int id) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 667, 505);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JLabel title = new JLabel("Cadastro de Filme");
+		JLabel title = new JLabel("Alterar Filme");
 		title.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		MovieDAO mdao = new MovieDAO();
+		Movie m = mdao.read(id);
+		
+		JLabel lblId = new JLabel("lbl_id");
 		
 		JLabel lblNewLabel = new JLabel("Titulo");
 		
@@ -106,12 +114,32 @@ public class JFRegisterMovie extends JFrame {
 		JTextArea txtSynopsis = new JTextArea();
 		txtSynopsis.setLineWrap(true);
 		
-		JButton btnRegister = new JButton("Cadastrar");
-		btnRegister.addActionListener(new ActionListener() {
+		
+		lblId.setText(String.valueOf(m.getId()));
+		txtTitle.setText(m.getTitle());
+		txtSynopsis.setText(m.getSynopsis());
+		txtCategory.setText(m.getCategory());
+		spinnerLength.setValue(m.getLenght());
+		
+		if(m.isImage3d()) {
+			rdbtn3D.setSelected(true);
+		} else {
+			rdbtn2D.setSelected(true);
+		}
+		
+		if(m.isDubbed()) {
+			rdbtnDub.setSelected(true);
+		} else {
+			rdbtnSub.setSelected(true);
+		}
+		
+		JButton btnUpdate = new JButton("Alterar");
+		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Movie m = new Movie();
 				MovieDAO dao = new MovieDAO();
 				
+				m.setId(Integer.parseInt(lblId.getText()));
 				m.setTitle(txtTitle.getText());
 				m.setSynopsis(txtSynopsis.getText());
 				m.setCategory(txtCategory.getText());
@@ -128,26 +156,35 @@ public class JFRegisterMovie extends JFrame {
 					m.setDubbed(false);
 				}
 				
-				dao.create(m);
+				dao.update(m);
 			}
 		});
 		
 		JButton btnClear = new JButton("Limpar");
 		
 		JButton btnCancel = new JButton("Cancelar");
+		
+		JLabel lblNewLabel_6 = new JLabel("ID:");
+		
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(txtCategory, GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-						.addComponent(txtTitle, GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-						.addComponent(title)
+						.addComponent(txtCategory, GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+						.addComponent(txtTitle, GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(title)
+							.addGap(48)
+							.addComponent(lblNewLabel_6)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(lblId))
 						.addComponent(lblNewLabel)
 						.addComponent(lblNewLabel_1)
 						.addComponent(lblNewLabel_2)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
+						.addComponent(scrollPane)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblNewLabel_3)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -166,7 +203,7 @@ public class JFRegisterMovie extends JFrame {
 								.addComponent(rdbtnSub)
 								.addComponent(rdbtnDub)))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnRegister)
+							.addComponent(btnUpdate)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnClear)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -177,7 +214,10 @@ public class JFRegisterMovie extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(title)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(title)
+						.addComponent(lblNewLabel_6)
+						.addComponent(lblId))
 					.addGap(30)
 					.addComponent(lblNewLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -204,7 +244,7 @@ public class JFRegisterMovie extends JFrame {
 						.addComponent(rdbtn2D))
 					.addPreferredGap(ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnRegister)
+						.addComponent(btnUpdate)
 						.addComponent(btnClear)
 						.addComponent(btnCancel))
 					.addContainerGap())

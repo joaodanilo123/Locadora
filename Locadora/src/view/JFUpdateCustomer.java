@@ -7,7 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import model.bean.Customer;
+import model.bean.Movie;
 import model.dao.CustomerDAO;
+import model.dao.MovieDAO;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -16,12 +18,10 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
-
 import java.awt.event.ActionEvent;
-
 import java.awt.event.ActionListener;
 
-public class JFRegisterCustomer extends JFrame {
+public class JFUpdateCustomer extends JFrame {
 
 	/**
 	 * 
@@ -33,7 +33,7 @@ public class JFRegisterCustomer extends JFrame {
 	private JTextField txtEmail;
 	private JTextField txtPhone;
 
-
+	private static int id;
 	/**
 	 * Launch the application.
 	 */
@@ -41,7 +41,7 @@ public class JFRegisterCustomer extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JFRegisterCustomer frame = new JFRegisterCustomer();
+					JFUpdateCustomer frame = new JFUpdateCustomer(id);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -53,14 +53,14 @@ public class JFRegisterCustomer extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JFRegisterCustomer() {
+	public JFUpdateCustomer(int id) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 565, 426);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JLabel lblNewLabel = new JLabel("Cadastro de cliente");
+		JLabel lblNewLabel = new JLabel("Altera\u00E7\u00E3o de cliente");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		txtName = new JTextField();
@@ -83,7 +83,18 @@ public class JFRegisterCustomer extends JFrame {
 		
 		JLabel lblNewLabel_4 = new JLabel("Telefone");
 		
-		JButton btnRegister = new JButton("Cadastrar");
+		JLabel lblId = new JLabel("id");
+		
+		lblId.setText(String.valueOf(id));
+		
+		CustomerDAO dao = new CustomerDAO();
+		Customer c = dao.read(id);
+		txtName.setText(c.getName());
+		txtCpf.setText(c.getCpf());
+		txtEmail.setText(c.getEmail());
+		txtPhone.setText(c.getPhone());
+		
+		JButton btnRegister = new JButton("Alterar");
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Customer c = new Customer();
@@ -93,28 +104,37 @@ public class JFRegisterCustomer extends JFrame {
 				c.setCpf(txtCpf.getText());
 				c.setEmail(txtEmail.getText());
 				c.setPhone(txtPhone.getText());
+				c.setId(Integer.parseInt(lblId.getText()));
 				
-				dao.create(c);	
+				dao.update(c);
 			}
 		});
 		
 		JButton btnClear = new JButton("Limpar");
 		
 		JButton btnCancel = new JButton("Cancelar");
+		
+		JLabel lblNewLabel_5 = new JLabel("ID:");
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblNewLabel_5)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblId))
 						.addComponent(txtPhone, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNewLabel_4)
 						.addComponent(txtEmail, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
 						.addComponent(lblNewLabel_3)
-						.addComponent(txtCpf, GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+						.addComponent(txtCpf, GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
 						.addComponent(lblNewLabel_2)
-						.addComponent(txtName, GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+						.addComponent(txtName, GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
 						.addComponent(lblNewLabel_1)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(btnRegister)
@@ -128,7 +148,10 @@ public class JFRegisterCustomer extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_5)
+						.addComponent(lblId))
 					.addGap(27)
 					.addComponent(lblNewLabel_1)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -154,5 +177,4 @@ public class JFRegisterCustomer extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
-	
 }
