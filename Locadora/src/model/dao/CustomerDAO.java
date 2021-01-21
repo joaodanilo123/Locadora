@@ -125,6 +125,23 @@ public class CustomerDAO {
 		}
 		
 	}
-	
-	
+
+	public void remove(int customerId) {
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement("DELETE FROM customer WHERE id=?");
+			
+			stmt.setInt(1, customerId);
+			stmt.executeUpdate();
+			
+			JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso!");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao atualizar:" + e);
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.closeConnection(con, stmt);
+		}
+	}
 }

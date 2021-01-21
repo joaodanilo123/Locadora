@@ -110,6 +110,24 @@ public class JFListCustomers extends JFrame {
 		contentPane.add(btnChange);
 		
 		JButton btnRemove = new JButton("Excluir Cliente");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = jtCustomers.getSelectedRow();
+				
+				if(selectedRow != -1) {
+					
+					int id = (int) jtCustomers.getValueAt(selectedRow, 0);
+					CustomerDAO dao = new CustomerDAO();
+					dao.remove(id);
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "Selecione um cliente");
+				}
+				
+				readJTable();	
+				
+			}
+		});
 		btnRemove.setBounds(288, 379, 144, 23);
 		contentPane.add(btnRemove);
 		

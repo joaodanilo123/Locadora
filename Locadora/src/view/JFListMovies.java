@@ -106,6 +106,23 @@ public class JFListMovies extends JFrame {
 		contentPane.add(btnChange);
 		
 		JButton btnRemove = new JButton("Excluir Filme");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = JTMovies.getSelectedRow();
+				MovieDAO dao = new MovieDAO();
+				if(selectedRow != -1) {
+					
+					int id = (int) JTMovies.getValueAt(selectedRow, 0);
+					dao.remove(id);
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "Selecione um filme");
+				}
+				
+				readJTable();
+				
+			}
+		});
 		btnRemove.setBounds(288, 379, 107, 23);
 		contentPane.add(btnRemove);
 		

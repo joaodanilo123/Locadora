@@ -130,5 +130,24 @@ public class MovieDAO {
 		
 	}
 	
+	public void remove(int movieId) {
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement("DELETE FROM movie WHERE id=?");
+			
+			stmt.setInt(1, movieId);
+			stmt.executeUpdate();
+			
+			JOptionPane.showMessageDialog(null, "Filme excluído com sucesso!");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro ao atualizar:" + e);
+			e.printStackTrace();
+		} finally {
+			ConnectionFactory.closeConnection(con, stmt);
+		}
+		
+	}
 	
 }
