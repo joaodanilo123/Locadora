@@ -58,7 +58,7 @@ public class JFUpdateMovie extends JFrame {
 	 * Create the frame.
 	 */
 	public JFUpdateMovie(int id) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 667, 505);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -157,12 +157,26 @@ public class JFUpdateMovie extends JFrame {
 				}
 				
 				dao.update(m);
+				dispose();
 			}
 		});
 		
 		JButton btnClear = new JButton("Limpar");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtTitle.setText("");
+				txtSynopsis.setText("");
+				txtCategory.setText("");
+				spinnerLength.setValue(0);
+			}
+		});
 		
 		JButton btnCancel = new JButton("Cancelar");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		
 		JLabel lblNewLabel_6 = new JLabel("ID:");
 		

@@ -20,6 +20,8 @@ import model.dao.CustomerDAO;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.event.ActionEvent;
 
 public class JFListCustomers extends JFrame {
@@ -51,8 +53,15 @@ public class JFListCustomers extends JFrame {
 	 * Create the frame.
 	 */
 	public JFListCustomers() {
+		addWindowFocusListener((WindowFocusListener) new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent e) {
+				readJTable();
+			}
+			public void windowLostFocus(WindowEvent e) {
+			}
+		});
 		setTitle("Listar Filmes");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 659, 452);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -82,6 +91,14 @@ public class JFListCustomers extends JFrame {
 		scrollPane.setViewportView(jtCustomers);
 		
 		JButton btnCreate = new JButton("Cadastrar Cliente");
+		btnCreate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFRegisterCustomer rg = new JFRegisterCustomer();
+				rg.setVisible(true);
+				
+				readJTable();
+			}
+		});
 		btnCreate.setBounds(20, 379, 134, 23);
 		contentPane.add(btnCreate);
 		

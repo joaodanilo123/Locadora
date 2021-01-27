@@ -7,9 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import model.bean.Customer;
-import model.bean.Movie;
+
 import model.dao.CustomerDAO;
-import model.dao.MovieDAO;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -107,12 +106,26 @@ public class JFUpdateCustomer extends JFrame {
 				c.setId(Integer.parseInt(lblId.getText()));
 				
 				dao.update(c);
+				dispose();
 			}
 		});
 		
 		JButton btnClear = new JButton("Limpar");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtName.setText("");
+				txtCpf.setText("");
+				txtEmail.setText("");
+				txtPhone.setText("");
+			}
+		});
 		
 		JButton btnCancel = new JButton("Cancelar");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		
 		JLabel lblNewLabel_5 = new JLabel("ID:");
 		

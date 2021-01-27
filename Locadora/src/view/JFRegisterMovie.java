@@ -55,7 +55,7 @@ public class JFRegisterMovie extends JFrame {
 	 * Create the frame.
 	 */
 	public JFRegisterMovie() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 667, 505);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -129,12 +129,27 @@ public class JFRegisterMovie extends JFrame {
 				}
 				
 				dao.create(m);
+				dispose();
 			}
 		});
 		
 		JButton btnClear = new JButton("Limpar");
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtTitle.setText("");
+				txtSynopsis.setText("");
+				txtCategory.setText("");
+				spinnerLength.setValue(0);
+
+			}
+		});
 		
 		JButton btnCancel = new JButton("Cancelar");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
